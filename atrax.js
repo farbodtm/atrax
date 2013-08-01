@@ -34,6 +34,7 @@ atrax.crawl = function(url, re, callback) {
       return false;
     }
   }
+  console.error('\033[34m atrax \033[0m - crawling ' + url);
   http.get(url, function(res){
     var html = '';
     res.setEncoding('utf8');
@@ -45,5 +46,12 @@ atrax.crawl = function(url, re, callback) {
     });
   });
 };
+
+atrax.getTitle = function(url, callback) {
+  var re = /<title>(.*)<\/title>/
+  atrax.crawl(url, re, function(result){
+    callback(result[1]);
+  });
+}
 
 module.exports = atrax;
