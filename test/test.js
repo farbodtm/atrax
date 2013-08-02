@@ -8,4 +8,7 @@ atrax.crawl(url, re, function(result){
 });
 atrax.getTitle(url, function(result){
   console.log(result);
+});
+atrax.getLinks(url, function(result){
+  console.log(result);
 })

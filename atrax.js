@@ -25,12 +25,23 @@ atrax.options = {
 
 };
 
-atrax.crawl = function(url, re, callback) {
+/*
+ * atrax's main function - crawling an url and apply the provided regular expression on it and call the provided callback
+ *
+ * @param url (string)
+ * @param re (object - regular expression) (optional)
+ * @param callback (function)
+ *  
+ */
+
+atrax.crawl = function() {
+  var args = arguments;
+  var url = args[0];
   if (typeof url === 'object') {
     url = urlLib.format(url);
   } else {
-    if (!/((http|https):\/\/(\w+:{0,1}\w*@)?(\S+)|)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)){
-      console.error('\033[34m atrax \033[0m - URL is not valid');
+    if (!/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)){
+      console.error('\033[31m atrax \033[0m - URL is not valid');
       return false;
     }
   }
@@ -42,14 +53,51 @@ atrax.crawl = function(url, re, callback) {
       html += data;
     });
     res.on('end', function(){
-      callback(re.exec(html));
+      if (args.length == 2) {
+        var callback = args[1];
+        callback(html);
+      }
+      if (args.length == 3) {
+        var callback = args[2];
+        callback(args[1].exec(html));
+      }
+      
     });
   });
 };
+/*
+ * crawl an url and get its links
+ *
+ * @param url (string)
+ * @param callback (function)
+ *  
+ */
+atrax.getLinks = function(url, callback) {
+  var re = /<a href="(\S+)">(.*)<\/a>/gm;
+  atrax.crawl(url, function(result) {
+    var obj = {};
+    var i = 0;
+    for (var i = 1; match = re.exec(result); i++) {
+      obj['link' + i] = {
+        title: match[2],
+        link: match[1]
+      };
+    }
+    callback(obj);
+  });
+}
+
+/*
+ * crawl an url and get its title
+ *
+ * @param url (string)
+ * @param callback (function)
+ *  
+ */
 
 atrax.getTitle = function(url, callback) {
   var re = /<title>(.*)<\/title>/
-  atrax.crawl(url, re, function(result){
+  atrax.crawl(url, re, function(result) {
     callback(result[1]);
   });
 }
