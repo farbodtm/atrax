@@ -102,4 +102,26 @@ atrax.getTitle = function(url, callback) {
   });
 }
 
+/*
+ * get the denstiy of a word in webpage
+ *
+ * @param url (string)
+ * @param callback (function)
+ *  
+ */
+atrax.getDensity = function(url, input, caseSensitivity, callback) {
+  atrax.crawl(url, function(result) { 
+    var n = 0;
+    var i = 0;
+    var cont = true;
+    if (caseSensitivity) result = result.toLowerCase();
+    while (cont){
+      n++;
+      i = result.indexOf(input, i) + 1;
+      if (i == -1 || i == 0) cont = false;
+    }
+    callback(n);
+  });
+
+}
 module.exports = atrax;

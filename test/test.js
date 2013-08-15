@@ -11,4 +11,7 @@ atrax.getTitle(url, function(result){
 });
 atrax.getLinks(url, function(result){
   console.log(result);
-})
+});
+atrax.getDensity(url, 'gold', true, function(result){
+  console.log(result);
+});
