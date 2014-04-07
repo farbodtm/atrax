@@ -24,6 +24,12 @@ var atrax = new EventClass();
 atrax.options = {
 
 };
+/*
+ *	atrax util function - error
+ */  
+atrax.error = function(msg) {
+  console.error('\033[31m atrax \033[0m - ' + msg);
+}
 
 /*
  * atrax's main function - crawling an url and apply the provided regular expression on it and call the provided callback
@@ -37,15 +43,21 @@ atrax.options = {
 atrax.crawl = function() {
   var args = arguments;
   var url = args[0];
+  // url argument would accept both url object and url string
   if (typeof url === 'object') {
     url = urlLib.format(url);
-  } else {
+  } else if (typeof url === 'string') {
     if (!/(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/.test(url)){
-      console.error('\033[31m atrax \033[0m - URL is not valid');
+      atrax.error('URL is not valid');
       return false;
     }
+  } else {
+    atrax.error('need an URL');
+    return false;
   }
+
   console.error('\033[34m atrax \033[0m - crawling ' + url);
+
   http.get(url, function(res){
     var html = '';
     res.setEncoding('utf8');
