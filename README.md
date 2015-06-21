@@ -1,5 +1,4 @@
 # atrax.js
-==============
 
 > Simple crawling module for node.js
 
