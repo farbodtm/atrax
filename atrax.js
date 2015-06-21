@@ -118,6 +118,8 @@ atrax.getTitle = function(url, callback) {
  * get the denstiy of a word in webpage
  *
  * @param url (string)
+ * @param input (string)
+ * @param caseSensitivity (bool)
  * @param callback (function)
  *  
  */
